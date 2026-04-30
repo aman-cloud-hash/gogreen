@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title id="pageTitle">Article - Go Green Eco Tech</title>
+    <link href="https://fonts.googleapis.com/css2?family=Urbanist:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="icon" type="image/png" href="images/go-green-1 logo new.png">
+    <link rel="stylesheet" href="style.css">
+    <style>
+        .article-hero { padding: 80px 0; background-color: var(--dark-green); color: white; text-align: center; }
+        .article-content { max-width: 800px; margin: -60px auto 80px auto; background: white; padding: 60px; border-radius: 20px; box-shadow: 0 20px 60px rgba(0,0,0,0.1); position: relative; z-index: 10; }
+        .article-content h1 { margin-bottom: 20px; font-size: 42px; }
+        .article-meta { margin-bottom: 40px; color: var(--primary-green); font-weight: 600; display: flex; gap: 20px; justify-content: center; }
+        .article-body { font-size: 18px; line-height: 1.8; color: #444; }
+        .article-body p { margin-bottom: 25px; }
+        .article-body strong { color: var(--dark-green); font-weight: 700; }
+        .article-body em { color: #666; font-style: italic; }
+        .article-img { width: 100%; border-radius: 12px; margin-bottom: 40px; height: 400px; object-fit: cover; }
+        @media (max-width: 768px) { .article-content { padding: 30px; margin-top: -30px; } .article-content h1 { font-size: 28px; } }
+    </style>
+</head>
+<body>
+    <header class="header">
+        <div class="container d-flex justify-content-between align-items-center">
+            <a href="index.html" class="logo"><img src="images/go-green-1 logo new.png" alt="Logo" style="height: 70px;"></a>
+            <nav class="nav-menu">
+                <ul>
+                    <li><a href="index.html">Home</a></li>
+                    <li><a href="about.html">About Us</a></li>
+                    <li><a href="services.html">Services</a></li>
+                    <li><a href="industries.html">Industries</a></li>
+                    <li><a href="contact.html">Contact</a></li>
+                </ul>
+            </nav>
+            <div class="header-action"><a href="contact.html" class="btn btn-primary">Request Pickup</a></div>
+        </div>
+    </header>
+
+    <main>
+        <section class="article-hero">
+            <div class="container">
+                <div class="article-meta">
+                    <span id="articleDate"><i class="fa-solid fa-calendar"></i> Date</span>
+                    <span id="articleTag"><i class="fa-solid fa-tag"></i> Category</span>
+                </div>
+            </div>
+        </section>
+
+        <article class="article-content">
+            <h1 id="articleTitle">Loading Article...</h1>
+            <img src="" alt="Article Image" class="article-img" id="articleImg">
+            <div class="article-body" id="articleBody">
+                <!-- Content will load here -->
+            </div>
+            <div class="mt-5 text-center"><a href="index.html" class="btn btn-primary">Back to Home</a></div>
+        </article>
+    </main>
+
+    <footer class="footer">
+        <div class="container footer-grid">
+            <div class="footer-col branding">
+                <a href="index.html" class="logo footer-logo"><img src="images/go-green-1 logo new.png" alt="Logo" style="height: 60px;"></a>
+                <p>Transforming industrial waste into sustainable resources for a cleaner, greener future.</p>
+            </div>
+            <div class="footer-col">
+                <h3>Quick Links</h3>
+                <ul><li><a href="index.html">Home</a></li><li><a href="about.html">About Us</a></li><li><a href="contact.html">Contact</a></li></ul>
+            </div>
+            <div class="footer-col contact-info">
+                <h3>Contact</h3>
+                <p><i class="fa-solid fa-envelope"></i> info@gogreenecotech.in</p>
+                <p><i class="fa-solid fa-phone"></i> +91 9112220077</p>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', async () => {
+            const urlParams = new URLSearchParams(window.location.search);
+            const articleId = urlParams.get('id');
+            
+            try {
+                const res = await fetch('http://localhost:3000/api/settings/gg_articles');
+                const articles = await res.json();
+
+                if (articles && articleId) {
+                    const article = articles.find(a => a.id == articleId);
+                    if (article) {
+                        document.title = article.title + " - Go Green Eco Tech";
+                        document.getElementById('articleTitle').textContent = article.title;
+                        document.getElementById('articleDate').innerHTML = `<i class="fa-solid fa-calendar"></i> ${article.date}`;
+                        document.getElementById('articleTag').innerHTML = `<i class="fa-solid fa-tag"></i> ${article.tag || 'Industry'}`;
+                        
+                        document.getElementById('articleImg').src = article.img || 'images/Sustainability Transformation.jpeg';
+                        document.getElementById('articleBody').innerHTML = article.content || '<p>No content available.</p>';
+                    } else {
+                        document.getElementById('articleTitle').textContent = "Article Not Found";
+                    }
+                }
+            } catch(e) {
+                console.error('Failed to load article from MySQL', e);
+            }
+        });
+    </script>
+</body>
+</html>
